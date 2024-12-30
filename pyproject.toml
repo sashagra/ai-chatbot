@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "ai-chatbot"
+version = "0.1.0"
+description = "basic ai chatbot with openai API"
+authors = ["Alexander <archon.san@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
