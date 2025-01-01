@@ -2,6 +2,8 @@ import asyncio
 import logging
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters.command import Command
+from aiogram.enums import ParseMode
+import re
 
 from ai_chatbot.config import BOT_TOKEN
 from ai_chatbot.chatgpt import ChatGptDialogs
@@ -11,6 +13,11 @@ d = ChatGptDialogs()
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
+
+def escape_markdown(text):
+    """Экранирует специальные символы для Markdown."""
+    return re.sub(r'([_*[\]()~`>)])', r'\\\1', text)
+
 
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
@@ -33,7 +40,11 @@ async def register_user(message: types.Message):
 
 @dp.message(F.text)
 async def dialog(message: types.Message):
-    await message.answer(d.send_to_openai(int(message.from_user.id), message.text))
+    print(message)
+    await message.answer(
+                d.send_to_openai(int(message.from_user.id), escape_markdown(message.text)),
+                parse_mode=ParseMode.MARKDOWN
+    )
 
 
 async def main():
